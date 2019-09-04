@@ -1,0 +1,63 @@
+version: "2"
+services:
+  app:
+    extends:
+      file: docker-compose.base.yml
+      service: app
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      APP_ENV: local
+      CONTAINER_ROLE: app
+    links:
+      - mysql
+      - redis
+    ports:
+      - "${APP_PORT}:80"
+  scheduler:
+    extends:
+      file: docker-compose.base.yml
+      service: scheduler
+    depends_on:
+      - app
+      - mysql
+      - redis
+    environment:
+      CONTAINER_ROLE: scheduler
+  queue:
+    extends:
+      file: docker-compose.base.yml
+      service: queue
+    depends_on:
+      - app
+      - mysql
+      - redis
+    environment:
+      CONTAINER_ROLE: queue
+  node:
+    extends:
+      file: docker-compose.base.yml
+      service: node
+  mysql:
+    extends:
+      file: docker-compose.base.yml
+      service: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASS}"
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_USER: "${DB_USER}"
+      MYSQL_PASSWORD: "${DB_PASS}"
+    ports:
+      - "${DB_PORT}:3306"
+  redis:
+    extends:
+      file: docker-compose.base.yml
+      service: redis
+    ports:
+      - 6379:6379
+volumes:
+  mysql:
+    driver: "local"
+  redis:
+    driver: "local"

@@ -1,0 +1,40 @@
+version: "2"
+services:
+  app:
+    image: yourcloudtelco/laravel:7.3
+    container_name: laravel-www
+    volumes:
+      - ./../site/:/var/www/html
+  scheduler:
+    image: laravel-www
+    container_name: laravel-scheduler
+    volumes:
+       - ./../site/:/var/www/html
+  queue:
+    image: laravel-www
+    container_name: laravel-queue
+    volumes:
+       - ./../site/:/var/www/html
+    environment:
+      CONTAINER_ROLE: queue
+  node:
+    image: yourcloudtelco/node:latest
+    volumes:
+     - ./../site/:/var/www/html
+  mysql:
+    image: mysql:5.7
+    container_name: laravel-mysql
+    volumes:
+      - ./storage/site/mysql:/var/lib/mysql
+      - ./config/mysql/mysql_local.cnf:/etc/mysql/conf.d/mysql_local.cnf:ro
+      - ./provision/mysql/init:/docker-entrypoint-initdb.d
+  redis:
+    image: redis:4-alpine
+    container_name: laravel-redis
+    volumes:
+      - redis:/data
+volumes:
+  mysql:
+    driver: "local"
+  redis:
+    driver: "local"
