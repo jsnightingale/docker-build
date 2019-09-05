@@ -2,6 +2,7 @@
 
 set -e
 
+# Define set of base Environment variables
 export APP_PORT=${APP_PORT:-80}
 export APP_ENV=${APP_ENV:-local}
 export DB_PORT=${DB_PORT:-3306}
@@ -10,12 +11,18 @@ export DB_NAME=${DB_NAME:-arena}
 export DB_USER=${DB_USER:-arena}
 export DB_PASS=${DB_PASS:-root}
 
+# Set regular expression for repository
 HTTPSREGEX="^https?://"
 
+# Check if site already exists. 
+# Remove site if found
 if [ -d "site" ]; then
     rm -rf site
 fi
 
+# Ask for the git repository url.
+# Should be https://....
+# Clone repository if it can find one
 echo -n "Enter the url of the git repsoitory you would like to clone: "
 read REPOSITORY
 if [[ $REPOSITORY =~ $HTTPSREGEX ]]; then
@@ -26,6 +33,7 @@ else
     exit 1
 fi
 
+# Generate an environment file for Laravel
 echo "Creating a env file..."
   	cat >> site/.env <<EOL
 #################################################
@@ -74,30 +82,38 @@ REDIS_PASSWORD=null
 REDIS_PORT=6379
 EOL
 
+# Install composer on the backend
 ./develop composer install
 
 sleep 5
 
+# Generate a key for laravel
 ./develop art key:generate
 
  sleep 5
 
+# Install npm on the node server
 ./develop npm install
 
 sleep 5
 
+# Run the development script for npm to compile assets
 ./develop npm run dev
 
+# Make missing directories for laravel
+# Otherwise we receive a cache path issue
+mkdir site/storage
 mkdir site/storage/framework
 mkdir site/storage/framework/sessions
 mkdir site/storage/framework/view
 mkdir site/storage/framework/cache
 
-# echo Starting mysql and nginx...
+# Starting app, mysql, nginx and proxy...
 ./develop up -d app mysql scheduler redis proxy
 
 sleep 5
 
+# Check that we can connect to the local database
 until ./develop exec mysql mysql -h 127.0.0.1 -u $DB_USER -p$DB_PASS -D $DB_NAME --silent -e "show databases;"
 do
   echo "Waiting for database connection..."
@@ -106,6 +122,8 @@ done
 
 echo "Successfully connected to the database..."
 
+# Ask if migrations need to be run
+# Sometimes we don't want to re run these if storage folder is still intact
 echo -n "Do you want to run migrations? (Y/N) "
 read MIGRATIONS
 if [[ $MIGRATIONS = 'Y' ]]; then
@@ -114,6 +132,7 @@ if [[ $MIGRATIONS = 'Y' ]]; then
     then
         echo Database Migration Started!
        
+        # Run migrations
         ./develop art migrate --path="database/migrations/db-calldetails";
         ./develop art migrate --path="database/migrations/db-coredb";
         ./develop art migrate --path="database/migrations/db-arena";
@@ -121,6 +140,7 @@ if [[ $MIGRATIONS = 'Y' ]]; then
 
         sleep 5
 
+        # Run Seeds
         echo Database Seeding Started!
         ./develop art db:seed --class=ConfigSeeder;
         ./develop art db:seed --class=WhiteLabelSeeder;
@@ -136,6 +156,8 @@ if [[ $MIGRATIONS = 'Y' ]]; then
 
 fi
 
+# Boot up queue once migrations and seeds are complete.
+# Can receive errors if done before migrations
 echo Starting queue...
 ./develop up -d queue
 
