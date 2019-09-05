@@ -3,7 +3,10 @@
 set -e
 
 HTTPSREGEX="^https?://"
-URLREGEX="[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]"
+
+if [ -d "site" ]; then
+    rm -rf site
+fi
 
 echo -n "Enter the url of the git repsoitory you would like to clone: "
 read REPOSITORY
