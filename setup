@@ -105,7 +105,7 @@ sleep 5
 mkdir site/storage
 mkdir site/storage/framework
 mkdir site/storage/framework/sessions
-mkdir site/storage/framework/view
+mkdir site/storage/framework/views
 mkdir site/storage/framework/cache
 
 # Starting app, mysql, nginx and proxy...
