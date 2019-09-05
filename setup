@@ -26,7 +26,6 @@ else
     exit 1
 fi
 
-mkdir site/bootstrap/cache
 mkdit site/storage/framework
 mkdir site/storage/framework/sessions
 mkdir site/storage/framework/view
