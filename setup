@@ -78,7 +78,7 @@ sleep 5
 sleep 5
 
 # echo Starting mysql and nginx...
-./develop up -d app mysql scheduler redis
+./develop up -d app mysql scheduler redis proxy
 
 sleep 5
 

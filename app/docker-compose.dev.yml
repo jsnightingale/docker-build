@@ -1,6 +1,6 @@
 version: "2"
 services:
-  nginx-proxy:
+  proxy:
     image: jwilder/nginx-proxy:alpine
     container_name: laravel-proxy
     ports:
