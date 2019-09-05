@@ -52,6 +52,7 @@ COPY ./config/nginx/sites/*.conf /etc/nginx/sites-available/
 COPY ./start.sh /usr/local/bin/start
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && composer global require hirak/prestissimo --no-plugins --no-scripts \
     && chmod +x /usr/local/bin/composer \
     && chmod +x /usr/local/bin/start \
     && ln -sf /dev/stdout /var/log/nginx/access.log \
