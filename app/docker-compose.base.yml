@@ -6,17 +6,15 @@ services:
     volumes:
       - ./../site/:/var/www/html
   scheduler:
-    image: laravel-www
+    image: yourcloudtelco/laravel:7.3
     container_name: laravel-scheduler
     volumes:
        - ./../site/:/var/www/html
   queue:
-    image: laravel-www
+    image: yourcloudtelco/laravel:7.3
     container_name: laravel-queue
     volumes:
        - ./../site/:/var/www/html
-    environment:
-      CONTAINER_ROLE: queue
   node:
     image: yourcloudtelco/node:latest
     volumes:
