@@ -26,6 +26,12 @@ else
     exit 1
 fi
 
+mkdir site/bootstrap/cache
+mkdit site/storage/framework
+mkdir site/storage/framework/sessions
+mkdir site/storage/framework/view
+mkdir site/storage/framework/cache
+
 echo "Creating a env file..."
   	cat >> site/.env <<EOL
 #################################################
@@ -33,15 +39,11 @@ echo "Creating a env file..."
 #################################################
 APP_ENV=local
 APP_DEBUG=true
+APP_TIMEZONE=Australia/Sydney
 APP_KEY=
 APP_URL=http://arena.test
 APP_COUNTRY=AU
 APP_CURRENCY=AUD
-
-DB_HOST=mysql
-CACHE_DRIVER=redis
-SESSION_DRIVER=redis
-REDIS_HOST=redis
 
 #################################################
 # DB Settings
@@ -63,6 +65,19 @@ VOIPDB1_USERNAME=root
 VOIPDB1_PASSWORD=root
 VOIPDB1_HOST=mysql
 VOIPDB1_PORT=3306
+
+#################################################
+# Drivers
+#################################################
+CACHE_DRIVER=redis
+SESSION_DRIVER=redis
+QUEUE_DRIVER=redis
+BROADCAST_DRIVER=log
+LOG_CHANNEL=single
+
+REDIS_HOST=redis
+REDIS_PASSWORD=null
+REDIS_PORT=6379
 EOL
 
 ./develop composer install
@@ -77,6 +92,8 @@ sleep 5
 
 sleep 5
 
+./develop npm run dev
+
 # echo Starting mysql and nginx...
 ./develop up -d app mysql scheduler redis proxy
 
@@ -88,28 +105,36 @@ do
   sleep 5
 done
 
-if [ $DB_PASS = 'root' ];
-then
-    echo Database Migration Started!
-   
-    ./develop art migrate --path="database/migrations/db-calldetails";
-    ./develop art migrate --path="database/migrations/db-coredb";
-    ./develop art migrate --path="database/migrations/db-arena";
-    echo Database Migration Finished!
+echo "Successfully connected to the database..."
 
-    sleep 5
+echo -n "Do you want to run migrations? (Y/N) "
+read MIGRATIONS
+if [[ $MIGRATIONS = 'Y' ]]; then
 
-    echo Database Seeding Started!
-    ./develop art db:seed --class=ConfigSeeder;
-    ./develop art db:seed --class=WhiteLabelSeeder;
-    ./develop art db:seed --class=CustomerSeeder;
-    ./develop art db:seed --class=CallingPlanSeeder;
-    ./develop art db:seed --class=NumberClassSeeder;
-    ./develop art db:seed --class=LineNumberAvailableDatabaseSeeder;
-    ./develop art db:seed --class=DeviceProvisionSeeder;
-    ./develop art db:seed --class=CallDetailsToBillDatabaseSeeder;
-    ./develop art db:seed --class=UserSeeder;
-    echo Database Seeding Completed!
+    if [ $DB_PASS = 'root' ];
+    then
+        echo Database Migration Started!
+       
+        ./develop art migrate --path="database/migrations/db-calldetails";
+        ./develop art migrate --path="database/migrations/db-coredb";
+        ./develop art migrate --path="database/migrations/db-arena";
+        echo Database Migration Finished!
+
+        sleep 5
+
+        echo Database Seeding Started!
+        ./develop art db:seed --class=ConfigSeeder;
+        ./develop art db:seed --class=WhiteLabelSeeder;
+        ./develop art db:seed --class=CustomerSeeder;
+        ./develop art db:seed --class=CallingPlanSeeder;
+        ./develop art db:seed --class=NumberClassSeeder;
+        ./develop art db:seed --class=LineNumberAvailableDatabaseSeeder;
+        ./develop art db:seed --class=DeviceProvisionSeeder;
+        ./develop art db:seed --class=CallDetailsToBillDatabaseSeeder;
+        ./develop art db:seed --class=UserSeeder;
+        echo Database Seeding Completed!
+    fi
+
 fi
 
 echo Starting queue...
