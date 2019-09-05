@@ -26,11 +26,6 @@ else
     exit 1
 fi
 
-mkdir site/storage/framework
-mkdir site/storage/framework/sessions
-mkdir site/storage/framework/view
-mkdir site/storage/framework/cache
-
 echo "Creating a env file..."
   	cat >> site/.env <<EOL
 #################################################
@@ -92,6 +87,11 @@ sleep 5
 sleep 5
 
 ./develop npm run dev
+
+mkdir site/storage/framework
+mkdir site/storage/framework/sessions
+mkdir site/storage/framework/view
+mkdir site/storage/framework/cache
 
 # echo Starting mysql and nginx...
 ./develop up -d app mysql scheduler redis proxy
