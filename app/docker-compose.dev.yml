@@ -4,13 +4,10 @@ services:
     image: jwilder/nginx-proxy:alpine
     container_name: laravel-proxy
     ports:
-      - "80:80"
-      - "443:443"
+      - "3000:80"
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./config/nginx/vhost.d:/etc/nginx/vhost.d
-      - ./config/nginx/certs:/etc/nginx/certs:ro
-      - ./config/nginx/html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock
+      - ./config/nginx/certs:/etc/nginx/certs
     restart: unless-stopped
   app:
     extends:
@@ -23,14 +20,10 @@ services:
       APP_ENV: local
       CONTAINER_ROLE: app
       VIRTUAL_HOST: arena.test
-      VIRTUAL_PORT: 443
-      VIRTUAL_PROTO: https
-      CERT_NAME: arena
+      VIRTUAL_PORT: 3000
     links:
       - mysql
       - redis
-    expose:
-      - 443
   scheduler:
     extends:
       file: docker-compose.base.yml
