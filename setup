@@ -80,6 +80,11 @@ LOG_CHANNEL=single
 REDIS_HOST=redis
 REDIS_PASSWORD=null
 REDIS_PORT=6379
+
+#################################################
+# Testing
+#################################################
+SP_TEST=100
 EOL
 
 # Install composer on the backend
