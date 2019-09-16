@@ -30,7 +30,7 @@ services:
       - mysql
       - redis
     expose:
-      - 80
+      - 443
   scheduler:
     extends:
       file: docker-compose.base.yml
