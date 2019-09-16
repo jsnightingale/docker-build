@@ -33,7 +33,7 @@ services:
       CONTAINER_ROLE: app
       VIRTUAL_HOST: arena.test
       VIRTUAL_PORT: 80
-      LETSENCRYPT_HOST: [arena.test]
+      LETSENCRYPT_HOST: arena.test
       LETSENCRYPT_EMAIL: jackson@yourcloudtelco.com
     links:
       - mysql
