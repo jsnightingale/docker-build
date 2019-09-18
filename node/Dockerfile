@@ -1,3 +1,3 @@
-FROM node:7.2
+FROM node:8
 
 RUN apt-get install -y git
