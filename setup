@@ -18,7 +18,10 @@ HTTPSREGEX="^https?://"
 # Remove site if found
 if [ -d "site" ]; then
     rm -rf site
+    rm -rf build/storage
 fi
+
+./develop down
 
 # Ask for the git repository url.
 # Should be https://....
@@ -48,7 +51,7 @@ APP_COUNTRY=AU
 APP_CURRENCY=AUD
 
 #################################################
-# DB Settings
+# DB SETTINGS
 #################################################
 DB_DATABASE=arena
 DB_USERNAME=root
@@ -62,14 +65,14 @@ COREDB_PASSWORD=root
 COREDB_HOST=mysql
 COREDB_PORT=3306
 
-VOIPDB1_DATABASE=coredb
+VOIPDB1_DATABASE=2talk
 VOIPDB1_USERNAME=root
 VOIPDB1_PASSWORD=root
 VOIPDB1_HOST=mysql
 VOIPDB1_PORT=3306
 
 #################################################
-# Drivers
+# DRIVER SETTINGS
 #################################################
 CACHE_DRIVER=redis
 SESSION_DRIVER=redis
@@ -82,9 +85,10 @@ REDIS_PASSWORD=null
 REDIS_PORT=6379
 
 #################################################
-# Testing
+# TESTING CODES
 #################################################
 SP_TEST=100
+WL_CREDIT_CARD_DEFAULT=100
 EOL
 
 # Install composer on the backend
@@ -141,6 +145,7 @@ if [[ $MIGRATIONS = 'Y' ]]; then
         ./develop art migrate --path="database/migrations/db-calldetails";
         ./develop art migrate --path="database/migrations/db-coredb";
         ./develop art migrate --path="database/migrations/db-arena";
+        ./develop art migrate --path="database/migrations/db-2talk";
         echo Database Migration Finished!
 
         sleep 5

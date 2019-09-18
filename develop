@@ -9,7 +9,7 @@ export DB_NAME=${DB_NAME:-arena}
 export DB_USER=${DB_USER:-arena}
 export DB_PASS=${DB_PASS:-root}
 
-cd app/
+cd build/
 
 # Decide which docker-compose file to use
 COMPOSE_FILE="dev"
