@@ -30,7 +30,7 @@ echo -n "Enter the url of the git repsoitory you would like to clone: "
 read REPOSITORY
 if [[ $REPOSITORY =~ $HTTPSREGEX ]]; then
 
-    git clone $REPOSITORY site
+    git clone -b production $REPOSITORY site
 else 
     echo "We didn't like that input. Exiting..."
     exit 1
