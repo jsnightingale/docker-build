@@ -1,0 +1,12 @@
+# --
+# OS Level
+# --
+.DS_Store
+
+.git
+.gitignore
+build/storage/*
+build/config/nginx/certs/*
+site/*
+build/config/nginx/certs/arena.local.key
+build/config/nginx/certs/arena.local.crt
