@@ -91,7 +91,7 @@ SP_TEST=100
 WL_CREDIT_CARD_DEFAULT=100
 EOL
 
-docker network create nginx-proxy
+docker network create nginx-proxy || true
 
 sleep 5
 
