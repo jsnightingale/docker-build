@@ -5,6 +5,7 @@ services:
     container_name: laravel-proxy
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
       - ./config/nginx/certs:/etc/nginx/certs
@@ -19,13 +20,13 @@ services:
     environment:
       APP_ENV: local
       CONTAINER_ROLE: app
-      VIRTUAL_HOST: arena.test
-      VIRTUAL_PORT: 80
+      VIRTUAL_HOST: arena.local
     links:
       - mysql
       - redis
     expose:
       - 80
+      - 443
   scheduler:
     extends:
       file: docker-compose.base.yml
@@ -72,3 +73,7 @@ volumes:
     driver: "local"
   redis:
     driver: "local"
+networks:
+  default:
+    external:
+      name: nginx-proxy

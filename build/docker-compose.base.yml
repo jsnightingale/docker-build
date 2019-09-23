@@ -16,7 +16,7 @@ services:
     volumes:
        - ./../site/:/var/www/html
   node:
-    image: yourcloudtelco/node:latest
+    image: yourcloudtelco/node:8
     volumes:
      - ./../site/:/var/www/html
   mysql:

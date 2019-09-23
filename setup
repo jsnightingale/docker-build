@@ -46,7 +46,7 @@ APP_ENV=local
 APP_DEBUG=true
 APP_TIMEZONE=Australia/Sydney
 APP_KEY=
-APP_URL=http://arena.test
+APP_URL=http://arena.local
 APP_COUNTRY=AU
 APP_CURRENCY=AUD
 
@@ -155,7 +155,6 @@ if [[ $MIGRATIONS = 'Y' ]]; then
         ./develop art db:seed --class=ConfigSeeder;
         ./develop art db:seed --class=WhiteLabelSeeder;
         ./develop art db:seed --class=CustomerSeeder;
-        # ./develop art db:seed --class=CallingPlanSeeder;
         ./develop art db:seed --class=NumberClassSeeder;
         ./develop art db:seed --class=LineNumberAvailableDatabaseSeeder;
         ./develop art db:seed --class=DeviceProvisionSeeder;
@@ -170,5 +169,13 @@ fi
 # Can receive errors if done before migrations
 echo Starting queue...
 ./develop up -d queue
+
+#Set up https at https://arena.local
+./develop npm i -g create-ssl-certificate
+
+cd ./build/config/nginx/certs && create-ssl-certificate --hostname arena --domain local
+
+mv ssl.crt arena.local.crt
+mv ssl.key arena.local.key
 
 echo Installation Complete!
