@@ -93,6 +93,8 @@ EOL
 
 docker network create nginx-proxy
 
+sleep 5
+
 # Install composer on the backend
 ./develop composer install
 
