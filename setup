@@ -91,6 +91,8 @@ SP_TEST=100
 WL_CREDIT_CARD_DEFAULT=100
 EOL
 
+docker network create nginx-proxy
+
 # Install composer on the backend
 ./develop composer install
 
