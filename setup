@@ -177,7 +177,7 @@ echo Starting queue...
 #Set up https at https://arena.local
 ./develop npm i -g create-ssl-certificate
 
-mkdir ./build/config/nginx/
+mkdir ./build/config/nginx/certs
 cd ./build/config/nginx/certs && create-ssl-certificate --hostname arena --domain local
 
 mv ssl.crt arena.local.crt
