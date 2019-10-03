@@ -57,6 +57,7 @@ if [ $# -gt 0 ];then
             $COMPOSE run --rm \
                 app \
                 php artisan "$@"
+        fi
     
     # If "composer" is used, pass-thru to "composer"
     # inside a new container
