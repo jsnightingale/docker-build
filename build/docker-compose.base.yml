@@ -9,16 +9,16 @@ services:
     image: yourcloudtelco/laravel:7.3
     container_name: laravel-scheduler
     volumes:
-       - ./../site/:/var/www/html
+      - ./../site/:/var/www/html
   queue:
     image: yourcloudtelco/laravel:7.3
     container_name: laravel-queue
     volumes:
-       - ./../site/:/var/www/html
+      - ./../site/:/var/www/html
   node:
     image: yourcloudtelco/node:8
     volumes:
-     - ./../site/:/var/www/html
+      - ./../site/:/var/www/html
   mysql:
     image: mysql:5.7
     container_name: laravel-mysql
