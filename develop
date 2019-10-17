@@ -33,7 +33,7 @@ if [ $# -gt 0 ];then
     if [ "$1" == "art" ]; then
         shift 1
         $COMPOSE run --rm $TTY \
-            -w /var/www/html \
+            -w //var/www/html \
             app \
             php artisan "$@"
 
@@ -42,7 +42,7 @@ if [ $# -gt 0 ];then
     elif [ "$1" == "composer" ]; then
         shift 1
         $COMPOSE run --rm $TTY \
-            -w /var/www/html \
+            -w //var/www/html \
             app \
             composer "$@"
     
@@ -51,7 +51,7 @@ if [ $# -gt 0 ];then
     elif [ "$1" == "test" ]; then
         shift 1
         $COMPOSE run --rm $TTY \
-            -w /var/www/html \
+            -w //var/www/html \
             app \
             ./vendor/bin/phpunit "$@"
 
@@ -66,15 +66,16 @@ if [ $# -gt 0 ];then
     elif [ "$1" == "npm" ]; then
         shift 1
         $COMPOSE run --rm $TTY \
-            -w /var/www/html \
+            -w //var/www/html \
             node \
             npm "$@"
-            
+
      # If "node" is used, run node
     # from our node container
     elif [ "$1" == "node" ]; then
         shift 1
-        $COMPOSE run --rm \
+        $COMPOSE run --rm $TTY \
+            -w //var/www/html \
             node \
             node "$@"
 
